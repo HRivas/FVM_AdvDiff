@@ -13,7 +13,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import Graphics as plt2
 from scipy.sparse.linalg import spsolve
-import time
 
 # Datos del problema 5.1
 # Ecuacion
@@ -25,18 +24,18 @@ phi_0 = 1   # Frontera izquierda Dirichlet
 phi_L = 0   # Frontera derecha Dirichlet
 rho = 1.0   # kg/m^3
 Gamma = 0.1 # kg/m*s
-u = 0.2     # m/s Case i
-#u = 2.5     # m/s Case ii, iii
 L = 1       # m
+u = 0.1     # m/s Case i
+#u = 2.5     # m/s Case ii, iii
 
-N = 7       # Numero de nodos
+N = 5       # Numero de nodos
 #N = 20      # iii
 
 # Se puede seleccionar el metodo de aproximacion en las caras
-#method = 'Upwind'
-#method = 'CDS'
-#method = 'Upwind2'
-method = 'Quick'
+#scheme = 'Upwind'
+#scheme = 'CDS'
+#scheme = 'Upwind2'
+scheme = 'Quick'
 
 # Se puede seleccionar el algoritmo de solucion del sistema de ecuaciones
 #algoritmo = 'Default (LU Decomp)'
@@ -82,7 +81,7 @@ dif.calcCoef()
 #  -------------------------------------------------------
 adv = fvm.Advection1D(nvx = n_volx, rho = rho, dx = delta)
 adv.setU(u)
-adv.calcCoef(method)
+adv.calcCoef(scheme)
 
 #  -----------------------------------------------------
 #     Construye arreglo para almacenar la solucion
@@ -91,8 +90,8 @@ adv.calcCoef(method)
 phi = np.zeros(n_volx)                  # El arreglo para almacenar solucion
 phi[0]   = phi_0                        # Condición de frontera izquierda
 phi[-1]  = phi_L                        # Condición de frontera derecha
-coeff.bcDirichlet('LEFT_WALL', phi_0, method, rho, u)      # Actualiza los coeficientes considerando
-coeff.bcDirichlet('RIGHT_WALL', phi_L, method, rho, u)     # las condiciones de frontera
+coeff.bcDirichlet('LEFT_WALL', phi_0, scheme, rho, u)      # Actualiza los coeficientes considerando
+coeff.bcDirichlet('RIGHT_WALL', phi_L, scheme, rho, u)     # las condiciones de frontera
 
 #  --------------------------------------------------------
 #    Se construye el sistema lineal de ecuaciones a partir 
@@ -105,16 +104,13 @@ A = fvm.Matrix(mesh.volumes())    # Matriz del sistema
 #    Se resuelve el sistema de ecuaciones
 #  ---------------------------------------------------------------
 # Se puede elegir el algoritmo para calcular la solucion
-start = time.time()
+
 if algoritmo != 'Sparse':
     A.build(coeff)                                   # Construcción de la matriz en la memoria
     phi[1:-1] = np.linalg.solve(A.mat(), Su[1:-1])   # Se utiliza un algoritmo de linalg
 else:
     Asparse = A.buildSparse(coeff)            # Construcción de la matriz dispersa
     phi[1:-1] = spsolve(Asparse, Su[1:-1])    # Resuelve el sistema lineal con matriz dispersa
-end = time.time()
-print("hello")
-print(end - start)
 
 print('Solución = {}'.format(phi))
 print('.'+'-'*70+'.')

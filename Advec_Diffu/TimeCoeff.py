@@ -17,6 +17,10 @@ class Temporal1D(Coefficients):
     """    
     
     def __init__(self, nvx = None, rho = None, dx = None, dt = None):
+        """
+        Contructor
+        
+        """
         super().__init__(nvx)
         self.__nvx = nvx
         self.__rho = rho

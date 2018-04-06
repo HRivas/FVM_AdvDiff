@@ -4,6 +4,7 @@
 Created on Thu Mar 15 09:39:11 2018
 
 @author: H Ricardo Rivas G
+
 Solucion a la ecuacion de difusion del problema 4.1
 """
 
@@ -28,8 +29,8 @@ A = 10e-3  # m^2
 N = 5      # Numero de nodos
 
 # Se puede seleccionar el algoritmo de solucion del sistema de ecuaciones
-algoritmo = 'Default (LU Decomp)'
-#algoritmo = 'Sparse'
+#algoritmo = 'Default (LU Decomp)'
+algoritmo = 'Sparse'
 
 # -------------------------------------
 #    Se crea la malla
@@ -131,6 +132,7 @@ T_a = analyticSol(x1)
 #  -----------------------------------------------------
 #    Se grafica la solución
 #  -----------------------------------------------------
+plt.close('all')
 title_graf = 'Solución de $ \partial (k  \partial T/\partial x)/\partial x = 0$ con FVM'
 plt2.plotG(x, T, kind = '--o', xlabel = '$x$ [m]', ylabel = 'T [°C]', 
            label = 'Sol. FVM', title_graf = title_graf)

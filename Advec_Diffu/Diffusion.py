@@ -30,11 +30,6 @@ class Diffusion1D(Coefficients):
         aW += self.__Gamma / self.__dx
         aP += aE + aW
  
-#        for i in range(self.__nvx):
-#            aE[i] += self.__Gamma / self.__dx
-#            aW[i] += self.__Gamma / self.__dx
-#            aP[i] += aE[i] + aW[i]
-
 if __name__ == '__main__':
     
     df1 = Diffusion1D(5, 5, 1)

@@ -14,7 +14,8 @@ import numpy as np
 def plotG(x, y, xlabel = None, ylabel = None, 
           title_graf = None, label = None, kind = None, lw = None):
     """
-    Esta funcion permite graficar la funcion ingresada
+    Esta funcion permite graficar la funcion ingresada e incluir distintos
+    atributos para modificar la grafica
     
     x: variable independiente
     y: variable dependiente

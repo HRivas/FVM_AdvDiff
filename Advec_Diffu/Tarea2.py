@@ -4,6 +4,7 @@
 Created on Thu Mar 29 14:03:22 2018
 
 @author: H Ricardo Rivas G
+
 Solucion a la ecuacion de difusion del problema 4.2
 """
 
@@ -126,6 +127,7 @@ T_a = analyticalSol(x1)
 #  -----------------------------------------------------
 #    Se grafica la solución
 #  -----------------------------------------------------
+plt.close('all')
 title_graf = 'Solución de $ \partial (k  \partial T/\partial x)/\partial x = 0$ con FVM'
 plt2.plotG(x, T, kind = '--o', xlabel = '$x$ [m]', ylabel = 'T [°C]', 
            label = 'Sol. FVM', title_graf = title_graf)
