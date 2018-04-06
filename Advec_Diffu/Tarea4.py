@@ -25,17 +25,23 @@ phi_L = 0   # Frontera derecha Dirichlet
 rho = 1.0   # kg/m^3
 Gamma = 0.1 # kg/m*s
 L = 1       # m
-u = 0.1     # m/s Case i
-#u = 2.5     # m/s Case ii, iii
+
+# Seleccionar el caso i, ii o iii
+case = 'i'
 
 N = 5       # Numero de nodos
-#N = 20      # iii
+if case == 'i':
+    u = 0.1     # m/s Case i
+elif case == 'ii' or case == 'iii':
+    u = 2.5     # m/s Case ii, iii
+if case == 'iii':
+    N = 20      # Case iii
 
 # Se puede seleccionar el metodo de aproximacion en las caras
-#scheme = 'Upwind'
+scheme = 'Upwind'
 #scheme = 'CDS'
 #scheme = 'Upwind2'
-scheme = 'Quick'
+#scheme = 'Quick'
 
 # Se puede seleccionar el algoritmo de solucion del sistema de ecuaciones
 #algoritmo = 'Default (LU Decomp)'
@@ -141,6 +147,9 @@ datos = {'x(m)': x,
 fvm.printFrame(datos)
 print('||Error|| = ', np.linalg.norm(error))
 print('.'+ '-'*70 + '.')
+# Guarda resultados
+#filename = 'Tarea4_3d.out'
+#np.savetxt(filename, np.c_[x, phi, phi_a, error], delimiter=',')
 
 #  -------------------------------------------------------------------
 #   Calculamos la solución exacta en una malla más fina para graficar
@@ -152,10 +161,36 @@ phi_a = analyticalSol(x1)
 #    Se grafica la solución
 #  -----------------------------------------------------
 plt.close('all')
-title_graf = 'Solución de $\partial(p u \phi)/\partial x= \partial (\Gamma \partial\phi/\partial x)/\partial x$ con FVM'
+title_graf = 'Solución de $\partial(p u \phi)/\partial x= \partial (\Gamma \partial\phi/\partial x)/\partial x$ con FVM' + '\n Con el esquema {}'.format(scheme)
 plt2.plotG(x, phi, kind = "--o", xlabel = '$x$ [m]', ylabel = '$\phi[...]$', 
            label = 'Sol. FVM', title_graf = title_graf)
 plt2.plotG(x1, phi_a, kind = "-", xlabel = '$x$ [m]', ylabel = '$\phi[...]$', 
            label = 'Sol. analítica', lw=2, title_graf = title_graf)
-##plt.savefig('example04.pdf')
 plt.show()
+
+# Guarda la grafica
+#plt.savefig('Tarea4.svg')
+
+# -------------------------------------------------------------------
+#     Resultados del error
+#  Comparacion del error de los diferentes esquemas de aproximacion 
+#  para cada caso propuesto
+# -------------------------------------------------------------------
+plt.figure()
+if case == 'i':
+    E = [0.0121846815,0.0088021062,0.0112542588,0.0006463893]
+    title = 'Comparacion del error entre diferentes esquemas de aproximacion \n Caso i) u = 0.1, N = 5'
+elif case == 'ii':
+    E = [1.7015286422,0.209029963, 1.5926474435, 0.8551197359]
+    title = 'Comparacion del error entre diferentes esquemas de aproximacion \n Caso i) u = 2.5, N = 5'
+elif case == 'iii':
+    E = [0.1754804533,0.1706801141,0.1612178019,0.050991189]
+    title = 'Comparacion del error entre diferentes esquemas de aproximacion \n Caso i) u = 2.5, N = 20'
+    
+text=['CDS', 'Upwind', 'Upwind 2', 'Quick']
+X = np.arange(0,4)
+for i in range(0,4):
+    plt2.plotG(X[i], E[i], kind = "o", label = text[i], title_graf = title,
+               xlabel = 'Esquema de aproximacion', ylabel='||Error||')
+plt.plot(X, E,'--')
+#plt.savefig('Tarea4_1Res.svg')

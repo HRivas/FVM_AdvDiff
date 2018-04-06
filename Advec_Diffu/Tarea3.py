@@ -26,7 +26,7 @@ Tinf = 20  # °C
 n2 = 25    # 1/m^2
 L = 1      # m
 
-N = 5      # Numero de nodos
+N = 20      # Numero de nodos
 
 # Se puede seleccionar el algoritmo de solucion del sistema de ecuaciones
 #algoritmo = 'Default (LU Decomp)'
@@ -133,5 +133,7 @@ plt2.plotG(x1, T_a, kind = "-", xlabel = '$x$ [m]', ylabel = 'T [°C]',
            label = 'Sol. analítica', lw=2, title_graf = title_graf)
 plt2.plotG(x, T, kind = '--o', xlabel = '$x$ [m]', ylabel = 'T [°C]', 
            label = 'Sol. FVM', lw=2, title_graf = title_graf)
-#plt.savefig('example04.pdf')
 plt.show()
+
+# Guarda la grafica
+#plt.savefig('Tarea3.svg')

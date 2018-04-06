@@ -18,8 +18,7 @@ class Temporal1D(Coefficients):
     
     def __init__(self, nvx = None, rho = None, dx = None, dt = None):
         """
-        Contructor
-        
+        Contructor. Inicializa las variables del objeto
         """
         super().__init__(nvx)
         self.__nvx = nvx
@@ -28,15 +27,26 @@ class Temporal1D(Coefficients):
         self.__dt = dt
 
     def __del__(self):
+        """
+        Destructor. Borra las variables del objeto
+        """
         del(self.__nvx)
         del(self.__rho)
         del(self.__dx)
         del(self.__dt)
     
     def dT(self):
+        """
+        Devuleve el valor del paso de tiempo
+        """
         return self.__dt
 
     def calcCoef(self, phi_old):
+        """
+        Añade los termino temporales en los coeficientes correspondientes
+        
+        phi_old: valor de la solucion en el tiempo anterior
+        """
         aP = self.aP()
         Su = self.Su()
         rho = self.__rho

@@ -12,17 +12,34 @@ from scipy.sparse import csr_matrix
 class Matrix():
     
     def __init__(self, nvx = None):
+        """
+        Constructor. Inicializa las variables del objeto
+        
+        nvx: Numero de volumenes
+        """
         self.__N = nvx - 2 
         self.__A = np.eye(self.__N)
 
     def __del__(self):
+        """
+        Destructor. Borra las variables del objeto
+        """
         del(self.__N)
         del(self.__A)
         
     def mat(self):
+        """
+        Devuelve la representacion de la matriz
+        """
         return self.__A
     
     def build(self, coefficients = None):
+        """
+        Construye la matriz a partir de los coeficientes dados
+        
+        coefficients: Objeco de la clase coefficients que contiene el valor de
+        los coeficientes aX
+        """
     # nx = 5, nvx = 6
     # 0     1     2     3     4     5  <-- Volumes
     # o--|--x--|--x--|--x--|--x--|--o
@@ -57,13 +74,22 @@ class Matrix():
         A[-1][-3] = -aWW[-2]
         
     def buildSparse(self, coefficients = None):
+        """
+        Construye el objeto de matriz dispersa en el formato CSR (Compressed
+        Sparse Row)
+        
+        coefficients: Objeco de la clase coefficients que contiene el valor de
+        los coeficientes aX
+        """
         # Sparse Matrix
+        # Coeficientes
         aP = coefficients.aP()
         aE = coefficients.aE()
         aW = coefficients.aW()
         aEE = coefficients.aEE()
         aWW = coefficients.aWW()
         
+        # Almacena en un arreglo los datos distintos de cero
         N = self.__N
         data = np.zeros(N*5-6)
         data[0:3] = [aP[1], -aE[1], -aEE[1]]
@@ -77,13 +103,17 @@ class Matrix():
             data[5*i+7:5*i+7+5] = (-aWW[j+1], -aW[j+1], aP[j+1], -aE[j+1], -aEE[j+1])
             j += 1
         
+        # Almacena en un arreglo los apuntadores correspondientes a cada fila en
+        # la matriz a partir del arreglo de datos
         indptr = np.zeros(N+1)
         indptr[1] = 3
         indptr[-2] = len(data)-3
         indptr[-1] = len(data)
         for i in range(0,N-3):
             indptr[i+2] = 7+5*i
-            
+        
+        # Almacena los indices que establecen a que columna corresponde cada coeficiente
+        # en la matriz
         indices = np.zeros(N*5-6)
         indices[:3] = np.arange(0,3)
         indices[3:7] = np.arange(0,4)
@@ -93,6 +123,7 @@ class Matrix():
         for i in range(0,N-4):
             indices[5*i+7:5*i+7+5] = (0+i, 1+i, 2+i, 3+i, 4+i)
     
+        # Construye el objeto CSR
         Asp = csr_matrix((data, indices.astype(int), indptr.astype(int)))
         return Asp
 

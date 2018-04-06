@@ -13,6 +13,13 @@ from Coefficients import Coefficients
 class Advection1D(Coefficients):
     
     def __init__(self, nvx = None, rho = None, dx = None):
+        """
+        Constructor. Inicializa las variables del objeto
+        
+        nvx: Numero de volumenes
+        rho: Coeficiente de difusividad
+        dx: Intervalo longitudinal
+        """
         super().__init__(nvx)
         self.__nvx = nvx
         self.__rho = rho
@@ -20,21 +27,35 @@ class Advection1D(Coefficients):
         self.__u = np.zeros(nvx-1)
 
     def __del__(self):
+        """
+        Destructor. Borra las variables del objeto
+        """
         del(self.__nvx)
         del(self.__rho)
         del(self.__dx)
         del(self.__u)
 
     def setU(self, u):
+        """
+        Establece el valor de u (velocidad) en la variable del objeto
+        """
         if type(u) == float:
             self.__u.fill(u)
         else:
             self.__u = u
 
     def u(self):
+        """
+        Devuelve el valor de la velocidad u
+        """
         return self.__u
     
     def calcCoef(self, Approx):
+        """
+        Calcula los coeficientes de acuerdo al esquema de aproximacion elegido
+        
+        Approx: Esquema de aproximacion ('CDS'/'Upwind2'/'Quick'/Default (Upwind 1er orden))
+        """
         aE = self.aE()
         aW = self.aW()
         aP = self.aP()
@@ -85,26 +106,7 @@ class Advection1D(Coefficients):
                     aW[i] += aW_
                     aWW[i] += -CW/8
                     aEE[i] += CE2/8
-                    aP[i] += aE_ + aW_ + aWW[i] + aEE[i] + (Fe - Fw)
-#                    
-#            elif Approx == 'QuickM':
-#            # Quick
-#                if Fe > 0:
-#                    ae = 1
-#                    aw = 1
-#                else:
-#                    ae = 0
-#                    aw = 0
-#                CE = -3*ae*Fe/8 - 6*(1-ae)*Fe/8 - (1-aw)*Fw/8
-#                CW = 6*aw*Fw/8 + ae*Fe/8 + 3*(1-aw)*Fw/8
-#                CWW = -aw*Fw/8
-#                CEE = (1-ae)*Fe/8
-#                aE[i] += CE
-#                aW[i] += CW
-#                aWW[i] += CWW
-#                aEE[i] += CEE
-#                aP[i] += CW + CE + CWW + CEE + (Fe-Fw)
-                
+                    aP[i] += aE_ + aW_ + aWW[i] + aEE[i] + (Fe - Fw)                
             else:
             # Upwind
                 CE = max((-Fe,0))
@@ -116,7 +118,6 @@ class Advection1D(Coefficients):
 if __name__ == '__main__':
     nx = 6
     u = np.sin(np.linspace(0,1,nx))
-#    u = np.ones(nx)
     print('-' * 20)
     print(u)
     print('-' * 20)
@@ -127,17 +128,12 @@ if __name__ == '__main__':
     print(af1.u())
     print('-' * 20)
 
-#    af1.calcCoef('Central')
-#    print('Central')
-#    print(af1.aP(), af1.aE(), af1.aW(), af1.aEE(), af1.aWW(), af1.Su(), sep = '\n')
-#    print('-' * 20)
+    af1.calcCoef('CDS')
+    print('Central')
+    print(af1.aP(), af1.aE(), af1.aW(), af1.aEE(), af1.aWW(), af1.Su(), sep = '\n')
+    print('-' * 20)
     
     af1.calcCoef('Upwind2')
     print('Central')
     print(af1.aP(), af1.aE(), af1.aW(), af1.aEE(), af1.aWW(), af1.Su(), sep = '\n')
     print('-' * 20)
-
-#    af1.bcDirichlet('LEFT_WALL', 20)
-#    af1.bcDirichlet('RIGHT_WALL', 10)
-#    print(af1.aP(), af1.aE(), af1.aW(), af1.aEE(), af1.aWW(), af1.Su(), sep = '\n')
-#    print('-' * 20)

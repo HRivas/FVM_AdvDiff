@@ -138,5 +138,7 @@ plt2.plotG(x, T, kind = '--o', xlabel = '$x$ [m]', ylabel = 'T [°C]',
            label = 'Sol. FVM', title_graf = title_graf)
 plt2.plotG(x1, T_a, kind = "-", xlabel = '$x$ [m]', ylabel = 'T [°C]', 
            label = 'Sol. analítica', lw=2, title_graf = title_graf)
-#plt.savefig('example04.pdf')
 plt.show()
+
+# Guarda la grafica
+#plt.savefig('Tarea1.svg')

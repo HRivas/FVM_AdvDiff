@@ -12,16 +12,29 @@ from Coefficients import Coefficients
 class Diffusion1D(Coefficients):
     
     def __init__(self, nvx = None, Gamma = None, dx = None):
+        """
+        Constructor. Inicializa las variables del objeto
+        
+        nvx: Numero de volumenes
+        Gamma: Coeficiente de difusividad
+        dx: Intervalo longitudinal
+        """
         super().__init__(nvx, dx)
         self.__nvx = nvx
         self.__Gamma = Gamma
         self.__dx = dx
 
     def __del__(self):
+        """
+        Destructor. Borra las variables del objeto
+        """
         del(self.__Gamma)
         del(self.__dx)
     
     def calcCoef(self):
+        """
+        Añade los terminos difusivos a los coeficientes
+        """
         aE = self.aE()
         aW = self.aW()
         aP = self.aP()

@@ -52,6 +52,6 @@ def plotG(x, y, xlabel = None, ylabel = None,
 if __name__ == '__main__':
     x = np.linspace(0,1,1000)
     y = np.sin(2*np.pi*2e3*x)
-    plotG(x, y, xlabel = 'time [s]', ylabel = 'Amplitude [V]', 
-          title_graf = 'Sine wave', label = 'Signal 1', 
+    plotG(x, y, xlabel = 'tiempo [s]', ylabel = 'Amplitud [V]', 
+          title_graf = 'Onda senoidal', label = 'Señal 1', 
           kind = '--', lw = 4)

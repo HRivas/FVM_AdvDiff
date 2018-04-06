@@ -25,11 +25,23 @@ class Coefficients():
     __delta = None
 
     def __init__(self, nvx = None, delta = None):
+        """
+        Contructor de clase
+        
+        nvx = numero de volumenes
+        delta = Intervalo longitudinal (dx)
+        """
         Coefficients.__nvx = nvx
         Coefficients.__delta = delta
 
     @staticmethod
     def alloc(n):
+        """
+        Permite reservar el espacio de memoria para almacenar los coeficientes
+        del sistema de ecuaciones
+        
+        n = numero de volumenes
+        """
         if Coefficients.__nvx:
             nvx = Coefficients.__nvx
         else:
@@ -42,6 +54,11 @@ class Coefficients():
         Coefficients.__Su = np.zeros(nvx)
     
     def cleanCoefficients(self):
+        """
+        Pone a ceros todos los valores de los coeficientes
+        se utiliza en la solucion a la ecuecion no estacionaria para volver a 
+        calcular los coeficientes en cada iteracion
+        """
         Coefficients.__aP[:] = 0.0
         Coefficients.__aE[:] = 0.0
         Coefficients.__aW[:] = 0.0
@@ -50,41 +67,93 @@ class Coefficients():
         Coefficients.__Su[:] = 0.0
         
     def setVolumes(self, nvx):
+        """
+        Establece el valor de la variable de clase corresponiente al numero de 
+        volumenes
+        
+        nvx = numero de volumenes
+        """
         Coefficients.__nvx = nvx
         
     def setDelta(self, delta):
+        """
+        Establece el valor de la variable de clase corresponiente al intervalo
+        longitudinal (dx)
+        
+        delta = intervalo longitudinal (dx)
+        """
         Coefficients.__delta = delta
         
     def setSu(self, q):
+        """
+        Calcula el valor del vector del lado derecho a partir de un termino
+        fuente q
+        
+        q = valor del termino fuente
+        """
         Su = Coefficients.__Su
         dx = Coefficients.__delta
         Su += q * dx
         
     def setSp(self, Sp):
+        """
+        Ajusta los coeficientes de phi_P de acuerdo al termino fuente Sp
+        
+        Sq = valor del termino fuente relacionado con phi_P
+        """
         aP = Coefficients.__aP
         dx = Coefficients.__delta
         aP -= Sp * dx
         
     def aP(self):
+        """
+        Devuelve el valor de la variable de clase aP
+        """
         return Coefficients.__aP
 
     def aE(self):
+        """
+        Devuelve el valor de la variable de clase aE
+        """
         return Coefficients.__aE
     
     def aW(self):
+        """
+        Devuelve el valor de la variable de clase aW
+        """
         return Coefficients.__aW
     
     def aWW(self):
+        """
+        Devuelve el valor de la variable de clase aWW
+        """
         return Coefficients.__aWW
     
     def aEE(self):
+        """
+        Devuelve el valor de la variable de clase aEE
+        """
         return Coefficients.__aEE
     
     def Su(self):
+        """
+        Devuelve el valor de la variable de clase Su
+        """
         return Coefficients.__Su
 
     @staticmethod
-    def bcDirichlet(wall, phi_B, method = None, rho = None, u = None):
+    def bcDirichlet(wall, phi_B, scheme = None, rho = None, u = None):
+        """
+        Ajusto los coeficientes correspondientes a las condiciones de frontera
+        para el caso de condiciones tipo Dirichlet. Se consideran los ajustes 
+        correspondientes a cada tipo de esquema.
+        
+        wall: 'LEFT_WALL'/'RIGHT_WALL' (Frontera izquierda o derecha)
+        phi_B: Valor de la frontera
+        scheme: Tipo de esquema de aproximacion para los terminos advectivos
+        rho: Valor de densidad
+        u: Valor de velocidad
+        """
         aP = Coefficients.__aP
         aE = Coefficients.__aE
         aW = Coefficients.__aW
@@ -92,14 +161,14 @@ class Coefficients():
         aEE = Coefficients.__aEE
         Su = Coefficients.__Su
 
-        if method == None or method == 'Upwind' or method == 'CDS':
+        if scheme == None or scheme == 'Upwind' or scheme == 'CDS':
             if wall == 'LEFT_WALL':
                 aP[1] += aW[1]
                 Su[1] += 2 * aW[1] * phi_B
             elif wall == 'RIGHT_WALL':
                 aP[-2] += aE[-2]
                 Su[-2] += 2 * aE[-2] * phi_B
-        elif method == 'Quick':
+        elif scheme == 'Quick':
             Fe = rho*u
             Fw = rho*u
             CE = max((Fe,0))
@@ -138,7 +207,7 @@ class Coefficients():
                 Su[-2] += (8*D/3-CE)*phi_B
                 aP[-2] += -aE[-2] + aW_ + aWW_ + Fe - Fw - Sp
                 
-        elif method == 'Upwind2':
+        elif scheme == 'Upwind2':
             Fe = rho*u
             Fw = rho*u
             CE = max((Fe,0))
@@ -178,6 +247,13 @@ class Coefficients():
         
     @staticmethod
     def bcNeumman(wall, flux):
+        """
+        Ajusto los coeficientes correspondientes a las condiciones de frontera
+        para el caso de condiciones tipo Neumann
+        
+        wall: 'LEFT_WALL'/'RIGHT_WALL' (Frontera izquierda o derecha)
+        flux: Valor de flujo en la frontera
+        """
         aP = Coefficients.__aP
         aE = Coefficients.__aE
         aW = Coefficients.__aW

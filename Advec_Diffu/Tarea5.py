@@ -29,13 +29,14 @@ phi_0 = 1
 phi_L = 0
 L = 2.5         # m
 N = 50          # Numero de nodos
-N = 350
+#N = 350
+
 steps = 500     # Numero de pasos de tiempo
 
 # Se puede seleccionar el metodo de aproximacion en las caras
-#scheme = 'Upwind'
-#scheme = 'CDS'
-#scheme = 'Upwind2'
+scheme = 'Upwind'
+scheme = 'CDS'
+scheme = 'Upwind2'
 scheme = 'Quick'
 
 # Se puede seleccionar el algoritmo de solucion del sistema de ecuaciones
@@ -164,5 +165,7 @@ exac = analyticSol(x, u, dt * steps, Gamma)
 label = 'Solucion exacta @ t = {}'.format(steps*dt)
 plt2.plotG(x, exac, kind = "b-", xlabel = '$x$ [m]', ylabel = '$\phi[...]$', 
            label = label, lw=2)
-#plt.savefig('example04.pdf')
 plt.show()
+
+# Guarda la grafica
+#plt.savefig('Tarea5_1a.svg')

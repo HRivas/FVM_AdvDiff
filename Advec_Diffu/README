@@ -12,7 +12,7 @@ Para seleccionar qué algoritmo utilizar se encuentra la linea de:
 
 donde 'Opcion' puede ser 'Sparse' o 'Default (LU Decomp)'
 
-En aquellos donde se incluye el término advectivo se puede elegir el esquema de aproximación a través de la variable scheme:
+En aquellos donde se incluye el término advectivo se puede elegir el esquema de aproximación (Tarea 4 y 5) a través de la variable scheme:
 
 	scheme = 'Opcion'
 
@@ -27,6 +27,4 @@ En el archivo Tarea4.py se consideran los casos:
   ii) Cuando u = 2.5 m/s y 5 nodos
   iii) Cuando u = 2.5 m/s y 20 nodos
 
-Se deberán comentar y descomentar las líneas correspondientes.
-
-
+En la variable case se deberá elegir 'i', 'ii' o 'iii' para cada caso estudiado.
