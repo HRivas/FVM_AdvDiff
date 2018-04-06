@@ -28,13 +28,13 @@ def crono(f):
  	return eTime
 
 def decorate(f):
+    """
+    """
     def nicePrint(**kargs):
         line = '-' * 70
         print('.'+ line + '.')
-        #print('|{:^70}|'.format('NoNacos : Numerical Objects for Natural Convection Systems'))
         print('|{:^70}|'.format('Tarea 1'))
         print('.'+ line + '.')
-        #print('|{:^70}|'.format(' Ver. 0.1, Author LMCS, 2018, [GNU GPL License V3]'))
         print('|{:^70}|'.format('Ricardo Rivas, 2018'))
         print('.'+ line + '.')
         f(**kargs)

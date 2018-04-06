@@ -1,19 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Tue Apr  3 12:45:54 2018
+Created on Thu Apr  5 20:52:42 2018
 
 @author: H Ricardo Rivas G
 
-Solucion a la ecuacion de adveccion - difusion no estacionaria en una dimension
+Animacion de la solucion a la ecuacion de adveccion - difusion no estacionaria en una dimension
 """
-
 import FiniteVolumeMethod as fvm
 import numpy as np
 import matplotlib.pyplot as plt
-import Graphics as plt2
 from scipy.sparse.linalg import spsolve
 from scipy import special
+from matplotlib.animation import FuncAnimation
 
 # Ecuacion adveccion-difusion no estacionaria
 #      dphi      d                  d           dphi
@@ -29,7 +28,7 @@ phi_0 = 1
 phi_L = 0
 L = 2.5         # m
 N = 50          # Numero de nodos
-N = 350
+#N = 350
 steps = 500     # Numero de pasos de tiempo
 
 # Se puede seleccionar el metodo de aproximacion en las caras
@@ -103,11 +102,9 @@ phi = np.zeros(n_volx)             # El arreglo para almacenar solucion
 phi[0]   = phi_0                   # Condición de frontera izquierda
 phi[-1]  = phi_L                   # Condición de frontera derecha
 
-#  -----------------------------------------------------
-#   Solucion utilizando el metodo implicito
-#  -----------------------------------------------------
-plt.close('all')
-for i in range(1,steps+1):
+def implicitMethod(i):
+    time_step = i * dt
+    
     #  -----------------------------------------------------
     #     Ajusta los coeficientes en cada iteracion
     #  -----------------------------------------------------    
@@ -131,22 +128,16 @@ for i in range(1,steps+1):
         phi[1:-1] = np.linalg.solve(A.mat(), Su[1:-1])   # Se utiliza un algoritmo de linalg
     else:
         Asparse = A.buildSparse(coeff)            # Construcción de la matriz dispersa
-        phi[1:-1] = spsolve(Asparse, Su[1:-1])    # Resuelve el sistema lineal con matriz dispersa
-    
-    #  ---------------------------------------------------------------
-    #   Grafica la solucion cada 100 iteraciones
-    #  ---------------------------------------------------------------
-    
-    if (i % 100 == 0):
-        title_graf = 'Solucion a la ecuacion: $p \partial \phi / \partial t + \partial(p u \phi)/\partial x= \partial (\Gamma \partial\phi/\partial x)/\partial x$' + '\n Utilizando el metodo ' + method
-        label = 'Step = {}'.format(i*dt)
-        plt2.plotG(x, phi, kind = "--", xlabel = '$x$ [m]', ylabel = '$\phi[...]$', 
-                   label = label, lw = 2, title_graf = title_graf)
+        phi[1:-1] = spsolve(Asparse, Su[1:-1])    # Resuelve el sistema lineal con matriz dispersa    
+        
+    line.set_ydata(phi)                           # cambia los datos en la dirección y
+    label.set_text('Step = {:>8d} \n Time = {:>8.5f}'.format(i, time_step))
+        
+    return
 
+# Graficamos la solución exacta para t = 1.0 (500 pasos)
+#
 
-#  ---------------------------------------------------------------
-#   Grafica de la solucion analitica
-#  ---------------------------------------------------------------
 def analyticSol(x, u, t, Gamma):
     """
     Esta funcion permite calcular la solucion analitica de la ecuacion 
@@ -160,10 +151,27 @@ def analyticSol(x, u, t, Gamma):
  		np.exp(u * x) * np.exp(-Gamma) * special.erfc((x + u * t)/divisor))
     return phi
 
+fig = plt.figure(figsize=(8,4))                           # Se crea una nueva figura
+ax = plt.axes(xlim=(0, 3), ylim=(0, 1.2))                 # Se crean los ejes coordenados
+
 exac = analyticSol(x, u, dt * steps, Gamma)
-#title_graf = '$\rho \partial \phi / \partial t + \partial(p u \phi)/\partial x= \partial (\Gamma \partial\phi/\partial x)/\partial x$'
-label = 'Solucion exacta @ t = {}'.format(steps*dt)
-plt2.plotG(x, exac, kind = "b-", xlabel = '$x$ [m]', ylabel = '$\phi[...]$', 
-           label = label, lw=2)
-##plt.savefig('example04.pdf')
-plt.show()
+ax.plot(x,exac,'b-',label='Sol. Exac',lw=2)
+
+line, = ax.plot(x, phi, '--', label='FVM')                # Se grafica la funcion inicial
+label = ax.text(2.6, 0.5, 'Time = {:>8.5f}'.format(0),    # Despliega informacion del paso de tiempo
+                ha='center', va='center',fontsize=12)
+title_graf = 'Solucion a la ecuacion: $p \partial \phi / \partial t + \partial(p u \phi)/\partial x= \partial (\Gamma \partial\phi/\partial x)/\partial x$' + '\n Utilizando el metodo ' + method
+ax.set_title(title_graf)
+plt.xlabel('$x$ [m]')
+plt.ylabel('$\phi[...]$')
+ax.grid("on")
+ax.legend()
+
+#  ---------------------------------------------------------------
+# Función que controla el cálculo y la animación
+#  ---------------------------------------------------------------
+anim = FuncAnimation(fig,              # La figura
+                     implicitMethod,   # la función que cambia los datos
+                     interval=1,       # Intervalo entre cuadros en milisegundos
+                     frames=steps+1,   # Cuadros
+                     repeat=False)     # Permite poner la animación en un ciclo
