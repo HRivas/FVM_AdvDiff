@@ -18,7 +18,7 @@ En aquellos donde se incluye el término advectivo se puede elegir el esquema de
 
 donde 'Opcion' puede ser:
   'Upwind'  --- Upwind de primer orden
-  'CDS'	  --- Diferencias centrales
+  'CDS'	    --- Diferencias centrales
   'Upwind2' --- Upwind de segundo orden
   'Quick'   --- Quadratic Upstream Interpolation for Convective Kinematics
 
