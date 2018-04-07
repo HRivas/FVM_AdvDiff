@@ -28,15 +28,17 @@ Gamma = 1e-3    # kg/ (m * s)
 phi_0 = 1
 phi_L = 0
 L = 2.5         # m
+
 N = 50          # Numero de nodos
-N = 350
+#N = 350
+
 steps = 500     # Numero de pasos de tiempo
 
 # Se puede seleccionar el metodo de aproximacion en las caras
-#method = 'Upwind'
-#method = 'CDS'
-#method = 'Upwind2'
-method = 'Quick'
+scheme = 'Upwind'
+scheme = 'CDS'
+scheme = 'Upwind2'
+scheme = 'Quick'
 
 # Se puede seleccionar el algoritmo de solucion del sistema de ecuaciones
 #algoritmo = 'Default (LU Decomp)'
@@ -93,7 +95,7 @@ tem = fvm.Temporal1D(n_volx, rho = rho, dx = delta, dt = dt)
 #  -------------------------------------------------------
 #    Calcula coeficientes de FVM de la Advección
 #  -------------------------------------------------------
-adv.calcCoef(method)
+adv.calcCoef(scheme)
 
 #  -----------------------------------------------------
 #     Construye arreglo para almacenar la solucion
@@ -114,10 +116,10 @@ for i in range(1,steps+1):
     coeff.cleanCoefficients()       # Pone los coeficientes en ceros
     dif.calcCoef()                  # Calcula los coeficientes de la parte difusiva
     adv.setU(u)                     # Establece la velocidad u
-    adv.calcCoef(method)            # Calcula los coeficientes de la parte advectiva utilizando el metodo de aproximacion elegido
+    adv.calcCoef(scheme)            # Calcula los coeficientes de la parte advectiva utilizando el metodo de aproximacion elegido
     tem.calcCoef(phi)               # Calcula los coeficientes propios de la parte temporal
-    coeff.bcDirichlet('LEFT_WALL', phi_0, method, rho, u)      # Actualiza los coeficientes considerando
-    coeff.bcDirichlet('RIGHT_WALL', phi_L, method, rho, u)     # las condiciones de frontera
+    coeff.bcDirichlet('LEFT_WALL', phi_0, scheme, rho, u)      # Actualiza los coeficientes considerando
+    coeff.bcDirichlet('RIGHT_WALL', phi_L, scheme, rho, u)     # las condiciones de frontera
     
     Su = coeff.Su()                     # Vector del lado derecho
     A = fvm.Matrix(mesh.volumes())      # Matriz del sistema
@@ -138,7 +140,7 @@ for i in range(1,steps+1):
     #  ---------------------------------------------------------------
     
     if (i % 100 == 0):
-        title_graf = 'Solucion a la ecuacion: $p \partial \phi / \partial t + \partial(p u \phi)/\partial x= \partial (\Gamma \partial\phi/\partial x)/\partial x$' + '\n Utilizando el metodo ' + method
+        title_graf = 'Solucion a la ecuacion: $p \partial \phi / \partial t + \partial(p u \phi)/\partial x= \partial (\Gamma \partial\phi/\partial x)/\partial x$' + '\n Utilizando el esquema ' + scheme
         label = 'Step = {}'.format(i*dt)
         plt2.plotG(x, phi, kind = "--", xlabel = '$x$ [m]', ylabel = '$\phi[...]$', 
                    label = label, lw = 2, title_graf = title_graf)
@@ -164,5 +166,7 @@ exac = analyticSol(x, u, dt * steps, Gamma)
 label = 'Solucion exacta @ t = {}'.format(steps*dt)
 plt2.plotG(x, exac, kind = "b-", xlabel = '$x$ [m]', ylabel = '$\phi[...]$', 
            label = label, lw=2)
-##plt.savefig('example04.pdf')
 plt.show()
+
+# Guarda la grafica
+#plt.savefig('Tarea5_1a.svg')

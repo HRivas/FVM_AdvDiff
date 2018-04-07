@@ -6,9 +6,11 @@ Created on Sun Mar  4 13:21:50 2018
 @author: Luis Miguel De la Cruz Salas
 Modificado por: H Ricardo Rivas G
 """
+
 import numpy as np
 from pandas import DataFrame
 from Mesh import Mesh
+import matplotlib.pyplot as plt
 from Coefficients import Coefficients
 from Diffusion import Diffusion1D
 from Advection import Advection1D
@@ -18,7 +20,7 @@ import time
 
 def crono(f):
  	"""
- 	Regresa el tiempo que toma en ejecutarse la funcion.
+ 	Devuelve el tiempo que tarda en ejecutarse una funcion f.
  	"""
  	def eTime(A,b):
  		t1 = time.time()
@@ -29,11 +31,13 @@ def crono(f):
 
 def decorate(f):
     """
+    Dercorador de funcion f
+    Agrega texto antes y despues del resultado de la funcion
     """
     def nicePrint(**kargs):
         line = '-' * 70
         print('.'+ line + '.')
-        print('|{:^70}|'.format('Tarea 1'))
+        print('|{:^70}|'.format('Tarea 1. Computo Cientifico con Alto Valor Agregado'))
         print('.'+ line + '.')
         print('|{:^70}|'.format('Ricardo Rivas, 2018'))
         print('.'+ line + '.')
@@ -43,12 +47,21 @@ def decorate(f):
  
 @decorate
 def printData(**kargs):
-	for (key,value) in kargs.items():
-		print('|{:^70}|'.format('{0:>15s} = {1:10.5e}'.format(key, value)))
+    """
+    Imprime los datos del problema
+    
+    **kargs: dato = valor
+    """
+    for (key,value) in kargs.items():
+        print('|{:^70}|'.format('{0:>15s} = {1:10.5e}'.format(key, value)))
 
 def printFrame(d):
-    # Calculo el error porcentual y agrego al DataFrame
-    # una columna con esos datos llamada 'Error %'
+    """ 
+    Calcula el error porcentual y agrega al DataFrame
+    una columna con esos datos llamada 'Error %'
+    
+    d = Diccionario con los datos del resultado obtenido y el valor exacto de la solucion
+    """
     for i in range(0,len(d['Analytic'])):
         if d['Analytic'][i] == 0:
             d['Analytic'][i] = 1e-200
@@ -57,6 +70,12 @@ def printFrame(d):
     print('.'+ '-'*70 + '.')
 
 def calcError(phiA, phiN):
+    """
+    Calcula el error absoluto
+    
+    phiA: Solucion analitica
+    phi: Solucion con el metodo FVM
+    """
     return np.absolute(phiA - phiN)
         
 if __name__ == '__main__':

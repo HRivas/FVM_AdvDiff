@@ -7,6 +7,7 @@ Created on Thu Apr  5 20:52:42 2018
 
 Animacion de la solucion a la ecuacion de adveccion - difusion no estacionaria en una dimension
 """
+
 import FiniteVolumeMethod as fvm
 import numpy as np
 import matplotlib.pyplot as plt
@@ -28,14 +29,14 @@ phi_0 = 1
 phi_L = 0
 L = 2.5         # m
 N = 50          # Numero de nodos
-#N = 350
+N = 350
 steps = 500     # Numero de pasos de tiempo
 
 # Se puede seleccionar el metodo de aproximacion en las caras
-#method = 'Upwind'
-#method = 'CDS'
-#method = 'Upwind2'
-method = 'Quick'
+#scheme = 'Upwind'
+#scheme = 'CDS'
+#scheme = 'Upwind2'
+scheme = 'Quick'
 
 # Se puede seleccionar el algoritmo de solucion del sistema de ecuaciones
 #algoritmo = 'Default (LU Decomp)'
@@ -92,7 +93,7 @@ tem = fvm.Temporal1D(n_volx, rho = rho, dx = delta, dt = dt)
 #  -------------------------------------------------------
 #    Calcula coeficientes de FVM de la Advección
 #  -------------------------------------------------------
-adv.calcCoef(method)
+adv.calcCoef(scheme)
 
 #  -----------------------------------------------------
 #     Construye arreglo para almacenar la solucion
@@ -111,10 +112,10 @@ def implicitMethod(i):
     coeff.cleanCoefficients()       # Pone los coeficientes en ceros
     dif.calcCoef()                  # Calcula los coeficientes de la parte difusiva
     adv.setU(u)                     # Establece la velocidad u
-    adv.calcCoef(method)            # Calcula los coeficientes de la parte advectiva utilizando el metodo de aproximacion elegido
+    adv.calcCoef(scheme)            # Calcula los coeficientes de la parte advectiva utilizando el metodo de aproximacion elegido
     tem.calcCoef(phi)               # Calcula los coeficientes propios de la parte temporal
-    coeff.bcDirichlet('LEFT_WALL', phi_0, method, rho, u)      # Actualiza los coeficientes considerando
-    coeff.bcDirichlet('RIGHT_WALL', phi_L, method, rho, u)     # las condiciones de frontera
+    coeff.bcDirichlet('LEFT_WALL', phi_0, scheme, rho, u)      # Actualiza los coeficientes considerando
+    coeff.bcDirichlet('RIGHT_WALL', phi_L, scheme, rho, u)     # las condiciones de frontera
     
     Su = coeff.Su()                     # Vector del lado derecho
     A = fvm.Matrix(mesh.volumes())      # Matriz del sistema
@@ -127,17 +128,17 @@ def implicitMethod(i):
         A.build(coeff)                                   # Construcción de la matriz en la memoria
         phi[1:-1] = np.linalg.solve(A.mat(), Su[1:-1])   # Se utiliza un algoritmo de linalg
     else:
-        Asparse = A.buildSparse(coeff)            # Construcción de la matriz dispersa
-        phi[1:-1] = spsolve(Asparse, Su[1:-1])    # Resuelve el sistema lineal con matriz dispersa    
+        Asparse = A.buildSparse(coeff)                   # Construcción de la matriz dispersa
+        phi[1:-1] = spsolve(Asparse, Su[1:-1])           # Resuelve el sistema lineal con matriz dispersa    
         
-    line.set_ydata(phi)                           # cambia los datos en la dirección y
+    line.set_ydata(phi)                                  # Cambia los datos en la dirección y
     label.set_text('Step = {:>8d} \n Time = {:>8.5f}'.format(i, time_step))
         
     return
 
-# Graficamos la solución exacta para t = 1.0 (500 pasos)
-#
-
+#  ---------------------------------------------------------------
+# Grafica de la solución exacta para t = 1.0 (500 pasos)
+#  ---------------------------------------------------------------
 def analyticSol(x, u, t, Gamma):
     """
     Esta funcion permite calcular la solucion analitica de la ecuacion 
@@ -160,7 +161,7 @@ ax.plot(x,exac,'b-',label='Sol. Exac',lw=2)
 line, = ax.plot(x, phi, '--', label='FVM')                # Se grafica la funcion inicial
 label = ax.text(2.6, 0.5, 'Time = {:>8.5f}'.format(0),    # Despliega informacion del paso de tiempo
                 ha='center', va='center',fontsize=12)
-title_graf = 'Solucion a la ecuacion: $p \partial \phi / \partial t + \partial(p u \phi)/\partial x= \partial (\Gamma \partial\phi/\partial x)/\partial x$' + '\n Utilizando el metodo ' + method
+title_graf = 'Solucion a la ecuacion: $p \partial \phi / \partial t + \partial(p u \phi)/\partial x= \partial (\Gamma \partial\phi/\partial x)/\partial x$' + '\n Utilizando el esquema ' + scheme
 ax.set_title(title_graf)
 plt.xlabel('$x$ [m]')
 plt.ylabel('$\phi[...]$')
