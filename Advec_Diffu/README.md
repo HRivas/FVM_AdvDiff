@@ -1,4 +1,4 @@
-# Finite Volume Method
+# Finite Volume Method - Advection - Diffusion
 
 En esta carpeta se encuentran todos los archivos necesarios para ejecutar los diferentes ejercicios propuestos.
 
