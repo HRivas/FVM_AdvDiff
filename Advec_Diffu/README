@@ -2,9 +2,9 @@
 
 En esta carpeta se encuentran todos los archivos necesarios para ejecutar los diferentes ejercicios propuestos.
 
-Los archivos a ejecutar son los que continen el nombre TareaX.py
+Los archivos a ejecutar son los que contienen el nombre TareaX.py
 
-En todos estos ejercicios es posible elegir el algoritmo para solucionar el sistema de ecuaciones. Por ahora las opciones son: la que se encuentra implementada en linalg.solve que corresponde a la descomposición LU y la solucion a traves de la contruccion de un objeto como matriz dispersa con spsolve del paquete de scipy.
+En todos estos ejercicios es posible elegir el algoritmo para solucionar el sistema de ecuaciones. Por ahora las opciones son: la que se encuentra implementada en linalg.solve que corresponde a la descomposición LU y la solución a través de la contrucción de un objeto como matriz dispersa con spsolve del paquete de scipy.
 
 Para seleccionar qué algoritmo utilizar se encuentra la línea de:
 
@@ -14,11 +14,11 @@ donde 'Opción' puede ser 'Sparse' o 'Default (LU Decomp)'
 
 En aquellos donde se incluye el término advectivo se puede elegir el esquema de aproximación (Tarea 4 y 5) a través de la variable scheme:
 
-	scheme = 'Opcion'
+	scheme = 'Opción'
 
 donde 'Opcion' puede ser:
   'Upwind'  --- Upwind de primer orden
-  'CDS'	  --- Diferencias centradas
+  'CDS'	  --- Diferencias centrales
   'Upwind2' --- Upwind de segundo orden
   'Quick'   --- Quadratic Upstream Interpolation for Convective Kinematics
 
@@ -33,4 +33,4 @@ En el archivo Tarea5.py se consideran los casos:
 	a) N = 50
 	b) N = 350
 
-Se deberá elegir en la línea correspondiente de la variable N
+Se deberá elegir en la línea correspondiente a la variable N
