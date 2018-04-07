@@ -128,7 +128,7 @@ T_a = analyticalSol(x1)
 #    Se grafica la solución
 #  -----------------------------------------------------
 plt.close('all')
-title_graf = 'Solución de $ \partial (k  \partial T/\partial x)/\partial x = 0$ con FVM'
+title_graf = 'Solución de $ \partial (k  \partial T/\partial x)/\partial x + q= 0$ con FVM'
 plt2.plotG(x, T, kind = '--o', xlabel = '$x$ [m]', ylabel = 'T [°C]', 
            label = 'Sol. FVM', title_graf = title_graf)
 plt2.plotG(x1, T_a, kind = "-", xlabel = '$x$ [m]', ylabel = 'T [°C]', 

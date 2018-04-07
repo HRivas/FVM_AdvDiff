@@ -6,11 +6,11 @@ Los archivos a ejecutar son los que continen el nombre TareaX.py
 
 En todos estos ejercicios es posible elegir el algoritmo para solucionar el sistema de ecuaciones. Por ahora las opciones son: la que se encuentra implementada en linalg.solve que corresponde a la descomposición LU y la solucion a traves de la contruccion de un objeto como matriz dispersa con spsolve del paquete de scipy.
 
-Para seleccionar qué algoritmo utilizar se encuentra la linea de:
+Para seleccionar qué algoritmo utilizar se encuentra la línea de:
 
-	algoritmo = 'Opcion'
+	algoritmo = 'Opción'
 
-donde 'Opcion' puede ser 'Sparse' o 'Default (LU Decomp)'
+donde 'Opción' puede ser 'Sparse' o 'Default (LU Decomp)'
 
 En aquellos donde se incluye el término advectivo se puede elegir el esquema de aproximación (Tarea 4 y 5) a través de la variable scheme:
 
@@ -28,3 +28,9 @@ En el archivo Tarea4.py se consideran los casos:
   iii) Cuando u = 2.5 m/s y 20 nodos
 
 En la variable case se deberá elegir 'i', 'ii' o 'iii' para cada caso estudiado.
+
+En el archivo Tarea5.py se consideran los casos:
+	a) N = 50
+	b) N = 350
+
+Se deberá elegir en la línea correspondiente de la variable N

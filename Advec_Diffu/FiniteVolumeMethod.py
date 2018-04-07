@@ -10,6 +10,7 @@ Modificado por: H Ricardo Rivas G
 import numpy as np
 from pandas import DataFrame
 from Mesh import Mesh
+import matplotlib.pyplot as plt
 from Coefficients import Coefficients
 from Diffusion import Diffusion1D
 from Advection import Advection1D

@@ -182,10 +182,10 @@ if case == 'i':
     title = 'Comparacion del error entre diferentes esquemas de aproximacion \n Caso i) u = 0.1, N = 5'
 elif case == 'ii':
     E = [1.7015286422,0.209029963, 1.5926474435, 0.8551197359]
-    title = 'Comparacion del error entre diferentes esquemas de aproximacion \n Caso i) u = 2.5, N = 5'
+    title = 'Comparacion del error entre diferentes esquemas de aproximacion \n Caso ii) u = 2.5, N = 5'
 elif case == 'iii':
     E = [0.1754804533,0.1706801141,0.1612178019,0.050991189]
-    title = 'Comparacion del error entre diferentes esquemas de aproximacion \n Caso i) u = 2.5, N = 20'
+    title = 'Comparacion del error entre diferentes esquemas de aproximacion \n Caso iii) u = 2.5, N = 20'
     
 text=['CDS', 'Upwind', 'Upwind 2', 'Quick']
 X = np.arange(0,4)

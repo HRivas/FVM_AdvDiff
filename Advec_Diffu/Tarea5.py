@@ -28,6 +28,7 @@ Gamma = 1e-3    # kg/ (m * s)
 phi_0 = 1
 phi_L = 0
 L = 2.5         # m
+
 N = 50          # Numero de nodos
 #N = 350
 

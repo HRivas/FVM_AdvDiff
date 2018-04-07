@@ -29,7 +29,7 @@ phi_0 = 1
 phi_L = 0
 L = 2.5         # m
 N = 50          # Numero de nodos
-#N = 350
+N = 350
 steps = 500     # Numero de pasos de tiempo
 
 # Se puede seleccionar el metodo de aproximacion en las caras
